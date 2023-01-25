@@ -47,15 +47,23 @@ if (app.Environment.IsDevelopment())
 }
 
 app.MapGet("/", () => "Hello World!");
+
 app.UseCors();
 
-//projects
+#region projects
+
 app.MapGet("/projects/list", ([FromQuery(Name = "page")] int page, [FromQuery(Name = "totalItemsPerPage")] int totalItemsPerPage, IMediator mediator) => mediator.Send(new DotnetPlayground.Features.Projects.List.ListRequest(page, totalItemsPerPage)));
 app.MapGet("/projects/{projectId}", (Guid projectId, IMediator mediator) => mediator.Send(new DotnetPlayground.Features.Projects.GetById.GetByIdRequest(projectId)) );
 app.MapPost("/projects/", (CreateOrEditRequest request,  IMediator mediator) => mediator.Send(request));
 app.MapDelete("/projects", (Guid id, IMediator mediator) => mediator.Send(new DeleteRequest(id)));
-//people
-app.MapGet("/people/list", (IMediator mediator) => mediator.Send(new DotnetPlayground.Features.People.List.ListRequest()) );
-app.MapGet("/people/{peopleId}", (Guid peopleId, IMediator mediator) => mediator.Send(new DotnetPlayground.Features.People.GetById.GetByIdRequest(peopleId)) );
+
+#endregion
+
+#region people
+
+app.MapGet("/people/list", (IMediator mediator) => mediator.Send(new DotnetPlayground.Features.People.List.ListRequest()));
+app.MapGet("/people/{peopleId}", (Guid peopleId, IMediator mediator) => mediator.Send(new DotnetPlayground.Features.People.GetById.GetByIdRequest(peopleId)));
+
+#endregion
 
 app.Run();

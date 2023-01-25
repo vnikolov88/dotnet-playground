@@ -30,28 +30,34 @@ namespace DotnetPlayground.Features.Projects.CreateOrEdit
 
             if (request?.id == null)
             {
+                #region create
                 var newProject = new Project
                 {
                     Title = request.title,
                     Color = request.color,
                 };
-                //create
+                
                 _dataContext.Add(newProject);
 
                 await _dataContext.SaveChangesAsync();
 
                 return await new ValueTask<CreateOrEditResponse>(new CreateOrEditResponse(newProject.Id, newProject.Title, newProject.Color));
+
+                #endregion
             }
             else
             {
-                //update
-                 var projectToUpdate = await _dataContext.Projects.FindAsync(request.id);
-                 projectToUpdate. Title = request.title;
-                 projectToUpdate.Color = request.color;
+                #region update
+
+                var projectToUpdate = await _dataContext.Projects.FindAsync(request.id);
+                projectToUpdate. Title = request.title;
+                projectToUpdate.Color = request.color;
                 
                 await _dataContext.SaveChangesAsync();
 
                 return await new ValueTask<CreateOrEditResponse>(new CreateOrEditResponse(projectToUpdate.Id, projectToUpdate.Title, projectToUpdate.Color));
+
+                #endregion
             }
         }
     }
